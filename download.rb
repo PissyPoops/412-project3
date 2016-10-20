@@ -1,11 +1,11 @@
 require 'open-uri'
 require 'date'
 
-#1 - Make user customizable
+#CHANGE1 Make user customizable
 remoteFile = 'http://s3.amazonaws.com/tcmg412-fall2016/http_access_log'
 
-#2 - Change file location to obvious Linux-friendly
-localFile = 
+#CHANGE2 Change file save location to obvious Linux-friendly
+localFile = 'log_file.txt'
 
 #Asks user if they'd like to download the file
 puts 'Would you like to retrieve the file for parsing? (Y/N)'
@@ -21,7 +21,9 @@ errors = Hash.new
 if response == "Y" 
   puts "Downloading log file from " + remoteFile
   download = open(remoteFile)
-  File.write('/mnt/c/Users/John/Downloads/test', download)
+  IO.copy_stream(download, localFile)
+  else
+  puts "Then I have nothing to offer you..."
 end
 
 #puts localFile
