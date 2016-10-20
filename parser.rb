@@ -4,7 +4,7 @@ require 'time'
 
 totals = Hash.new
 files = Hash.new
-counter = Hash.new
+statuses = Hash.new
 failure_array = []
 
 
@@ -55,15 +55,32 @@ File.foreach(test_file) do |x|
   
 	# Grab the data from the fields we care about
 	full_date = Time.strptime(delimited[1], '%d/%b/%Y:%H:%M:%S')
-	year_month = req_date.strftime('%Y-%m')
+	year_month = full_date.strftime('%Y-%m')
 	request = delimited[2]
 	file_request = delimited[3]
 	status = delimited[5]
 
-  #puts mon_year
-  puts req_date
+
+  files[file_request] = (
+    if files[file_request]
+      files[file_request] += 1
+    else
+      1
+  end)
+  sorted_files = files.to_a
+  sorted_files.sort_by {|file, frequency| frequency}
+  puts sorted_files
+  
+  #counts[stat_code] = (if counts[stat_code] then counts[stat_code]+=1 else 1 end)
+  #stauses[status] = (
+  #  if statuses.include? status
+  #    statuses[status] += 1
+  #  else
+  #    1
+  #end)
+  
 end
- 
+
  
  
  
