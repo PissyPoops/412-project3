@@ -166,7 +166,6 @@ if file_frequency_least.length > 100
   else
 	  #IMPROVEMENT - Give user option to save output to a text file for later viewing.
     puts "\n\n     Good call. Not outputting #{file_frequency_least.length} files. \n\n"
-    sleep(2)
   end
   else
   file_frequency_least.each do |file, requests|
@@ -175,9 +174,10 @@ if file_frequency_least.length > 100
 end
 
 #######FILE-SPLITTER#######
-puts "File Splitter\n\n".center(@columns, '-')
+puts "File Splitter".center(@columns, '-')
+puts
 puts "The log file will now be catorgorized and saved by month and year.".center(@columns)
-puts "The default save location is - '#{splitter_path}'\n\n\n".center(@columns)
+puts "The default save location is - '#{splitter_path}'\n\n".center(@columns)
 
 Dir.mkdir(splitter_path) unless File.exists?(splitter_path)
 monthly_requests.each do |k,v|
@@ -186,4 +186,4 @@ monthly_requests.each do |k,v|
 		write.puts(v)
 	end
 end
-puts "     Program execution complete. Closing...\n.".center(@columns)
+puts "Program execution complete. Closing...\n.".center(@columns)
