@@ -123,6 +123,7 @@ File.foreach(@log_file) do |data|
 end
 
 #########OUTPUTS########
+#IMPROVEMENT - Save this output to text file
 question_formatter(1)
 puts "     There were a total of #{total_requests} requests in the log file."
 
@@ -163,6 +164,7 @@ if file_frequency_least.length > 100
       puts
     end
   else
+	  #IMPROVEMENT - Give user option to save output to a text file for later viewing.
     puts "\n\n     Good call. Not outputting #{file_frequency_least.length} files. \n\n"
     sleep(2)
   end
@@ -173,19 +175,9 @@ if file_frequency_least.length > 100
 end
 
 #######FILE-SPLITTER#######
-puts "File Splitter".center(@columns, '-')
-puts "The log file will now be catorgorized and saved individually.".center(@columns)
+puts "\n File Splitter".center(@columns, '-')
+puts "The log file will now be catorgorized and saved by month and year.".center(@columns)
 puts "The default save location is - '#{splitter_path}'".center(@columns)
-puts "\nContinue? (Y/N)".center(@columns)
-splitter_conf = gets.chomp.upcase
-
-if splitter_conf == 'Y'
-  puts "     Saving files."
-  sleep(1)
-  else 
-    abort()
-    puts "OK. Files won't won't be saved".center(@columns)
-end
 
 Dir.mkdir(splitter_path) unless File.exists?(splitter_path)
 monthly_requests.each do |k,v|
