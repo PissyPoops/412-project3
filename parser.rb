@@ -1,6 +1,7 @@
 require 'open-uri'
 require 'date'
 require 'time'
+require 'pp'
 
 totals = Hash.new
 file_frequency = Hash.new
@@ -31,10 +32,19 @@ def smallest_hash(hash)
   Hash[hash.select { |k,v| v == min }]
 end
 
+def incrementor(h,a)
+  h[a] = (
+    if h[a] then
+      h[a]+= 1
+    else
+      1
+    end)
+end
+
 #Asks user if they'd like to download the file(procede with program)
 puts 'Would you like to retrieve the file for parsing? (Y/N)'
-response = gets.chomp
-response.upcase!
+response = gets.chomp.upcase
+#response.upcase!
 if response == "Y" 
   puts "Downloading log file from " + remote_file
   puts
@@ -65,55 +75,75 @@ File.foreach(test_file) do |x|
 	# Grab the data from the fields we care about
 	full_date = Time.strptime(delimited[1], '%d/%b/%Y:%H:%M:%S')
 	y_m = full_date.strftime('%Y-%m')
+  #y_m_d = []   Include this later?
+  unix_time = full_date.to_i
 	request = delimited[2]
 	file_request = delimited[3]
 	status = delimited[5]
   
-  file_frequency[file_request] = (
-    if file_frequency[file_request] then 
-      file_frequency[file_request]+=1 
-    else 
-      1 
-    end)
-    
-  statuses[status] = (
-    if statuses[status] then
-      statuses[status]+= 1
-    else
-      1
-    end)
-  
-  monthly_requests[y_m] = (
-    if monthly_requests[y_m]
-      monthly_requests[y_m] += 1
-    else
-      1
-    end)
-    
-  #if by_month[y_m] == false
-    #by_month[y_m] = []
-  #end
-  
-  unix_time = full_date.to_i
-  
+  incrementor(monthly_requests, y_m)
+  incrementor(file_frequency, file_request)
+  incrementor(statuses, status)
+
 end
 
-#def incrementor(hash,array)
-#  hash()
-#end
+puts total_requests
 puts monthly_requests
+puts largest_hash(file_frequency)
+puts statuses
 
 
+########################################################################
+puts "################################1#################################"
+puts total_requests
+
+########################################################################
+puts "################################2#################################"
+monthly_requests_a = monthly_requests.to_a
+monthly_requests_a.each do |date, requests|
+  puts "#{date}, #{requests}"
+end
+
+########################################################################
+puts "################################3#################################"
+unsuccessful_requests = (((statuses['404'].to_f+ statuses['403'].to_f)/total_requests)*100)
+puts unsuccessful_requests
+
+########################################################################
+puts "################################4#################################"
+redirected_requests = (((statuses['302'].to_f+ statuses['304'].to_f)/total_requests)*100)
+puts redirected_requests
+
+########################################################################
+puts "################################5#################################"
+puts largest_hash(file_frequency)
+puts largest_hash(file_frequency).length
 
 
-############################################################
-#outputs
-##################################
+########################################################################
+puts "################################6#################################"
+file_frequency_least = smallest_hash(file_frequency).to_a.sort
 
-
-#puts "Total requests: " + total_requests
-#puts "Daily requests =: " + 
-#puts "Unsucessful requests: "
-#puts "Redirected requests: "
-#puts "Most requested file: "
-#puts "Least requested file: "
+if file_frequency_least.length > 100
+  puts "There are over #{file_frequency_least.length} individual files that have been requested only once."
+  puts "Would you like to view all of these individual files?" + "\n\n"
+  file_least_response = gets.chomp.upcase
+  if file_least_response == 'Y'
+    file_frequency_least.each do |file, requests|
+      print "#{file}"
+      puts
+    end
+  else
+    puts "OK. Not printing #{file_frequency_least.length} files." + "\n\n"
+  end
+  else
+  file_frequency_least.each do |file, requests|
+    print "#{file} "
+    puts
+  end
+end
+    
+  
+#file_frequency_least.each do |file, requests|
+#    puts "#{file} -- #{requests}"
+#end
