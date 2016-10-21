@@ -3,10 +3,10 @@ require 'date'
 require 'time'
 
 totals = Hash.new
-files = Hash.new
+file_frequency = Hash.new
 statuses = Hash.new
 failure_array = []
-
+unix_time = Hash.new
 
 #CHANGE1 Give user option to declare if they're on Windows or PC
 #CHANGE1 Make user customizable
@@ -38,11 +38,9 @@ if response == "Y"
 end
 
 
-
 #Counts the total number of requests (lines) in the file. 
 File.foreach(test_file) {}
 total_requests = $.
-
 
 i = 0
 #Loops through saved file
@@ -59,53 +57,43 @@ File.foreach(test_file) do |x|
 	request = delimited[2]
 	file_request = delimited[3]
 	status = delimited[5]
-
-
-  files[file_request] = (
-    if files[file_request]
-      files[file_request] += 1
+  
+  file_frequency[file_request] = (
+    if file_frequency[file_request] then 
+      file_frequency[file_request]+=1 
+    else 
+      1 
+    end)
+  statuses[status] = (
+    if statuses[status] then
+      statuses[status]+= 1
     else
       1
-  end)
-  sorted_files = files.to_a
-  sorted_files.sort_by {|file, frequency| frequency}
-  puts sorted_files
+    end)
   
-  #counts[stat_code] = (if counts[stat_code] then counts[stat_code]+=1 else 1 end)
-  #stauses[status] = (
-  #  if statuses.include? status
-  #    statuses[status] += 1
-  #  else
-  #    1
-  #end)
-  
+  t = Time.now.to_i
+  unix_time[full_date] = full_date.to_i
 end
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+def largest_hash_value(hash)
+  max = hash.values.max
+  Hash[hash.select { |k,v| v == max }]
+end
+
+def smallest_hash_value(hash)
+  min = hash.values.min
+  Hash[hash.select { |k,v| v == min }]
+end
+############################################################
+#outputs
+##################################
+largest_hash_value(unix_time).each do |k,v|
+  puts v
+end
+
+#puts "Total requests: " + total_requests
+#puts "Daily requests =: " + 
+#puts "Unsucessful requests: "
+#puts "Redirected requests: "
+#puts "Most requested file: "
+#puts "Least requested file: "
