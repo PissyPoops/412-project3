@@ -45,7 +45,7 @@ rows, columns = winsize
 
 #####################################################################################################
 #Ask user if they'd like to execute the program
-puts '\n\n'
+puts "Apache Log Parser - TCMG 304".center(columns)
 puts "Begin parsing? (Y/N)".center(columns)
 response = gets.chomp.upcase
 if response == "Y" 
@@ -59,6 +59,8 @@ end
 #Counts the total number of requests (lines) in the file. 
 File.foreach(log_file) {}
 total_requests = $.
+
+
 
 #Loops through the log file for parsing.
 File.foreach(log_file) do |data|
@@ -149,4 +151,5 @@ monthly_requests.each do |k,v|
 		write.puts(v)
 	end
 end
-puts "\n\nLogs catorgorized by year and month and saved at #{splitter_path}.\n\n"
+puts "     \n\nLogs catorgorized by year and month and saved at #{splitter_path}.\n\n"
+puts "     Program execution complete. Closing...\n\n".center(columns)
