@@ -5,8 +5,12 @@ require 'time'
 totals = Hash.new
 file_frequency = Hash.new
 statuses = Hash.new
+
+unix_time = []
+#daily_requests= Hash.new
+monthly_requests = Hash.new
+
 failure_array = []
-unix_time = Hash.new
 
 #CHANGE1 Give user option to declare if they're on Windows or PC
 #CHANGE1 Make user customizable
@@ -17,8 +21,15 @@ remote_file = 'http://s3.amazonaws.com/tcmg412-fall2016/http_access_log'
 local_file = 'log_file.txt'
 test_file = 'log_file_shortened.txt'
 
+def largest_hash(hash)
+  max = hash.values.max
+  Hash[hash.select { |k,v| v == max }]
+end
 
-
+def smallest_hash(hash)
+  min = hash.values.min
+  Hash[hash.select { |k,v| v == min }]
+end
 
 #Asks user if they'd like to download the file(procede with program)
 puts 'Would you like to retrieve the file for parsing? (Y/N)'
@@ -53,7 +64,7 @@ File.foreach(test_file) do |x|
   
 	# Grab the data from the fields we care about
 	full_date = Time.strptime(delimited[1], '%d/%b/%Y:%H:%M:%S')
-	year_month = full_date.strftime('%Y-%m')
+	y_m = full_date.strftime('%Y-%m')
 	request = delimited[2]
 	file_request = delimited[3]
 	status = delimited[5]
@@ -64,6 +75,7 @@ File.foreach(test_file) do |x|
     else 
       1 
     end)
+    
   statuses[status] = (
     if statuses[status] then
       statuses[status]+= 1
@@ -71,25 +83,33 @@ File.foreach(test_file) do |x|
       1
     end)
   
-  t = Time.now.to_i
-  unix_time[full_date] = full_date.to_i
+  monthly_requests[y_m] = (
+    if monthly_requests[y_m]
+      monthly_requests[y_m] += 1
+    else
+      1
+    end)
+    
+  #if by_month[y_m] == false
+    #by_month[y_m] = []
+  #end
+  
+  unix_time = full_date.to_i
+  
 end
 
-def largest_hash_value(hash)
-  max = hash.values.max
-  Hash[hash.select { |k,v| v == max }]
-end
+#def incrementor(hash,array)
+#  hash()
+#end
+puts monthly_requests
 
-def smallest_hash_value(hash)
-  min = hash.values.min
-  Hash[hash.select { |k,v| v == min }]
-end
+
+
+
 ############################################################
 #outputs
 ##################################
-largest_hash_value(unix_time).each do |k,v|
-  puts v
-end
+
 
 #puts "Total requests: " + total_requests
 #puts "Daily requests =: " + 
