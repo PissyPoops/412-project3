@@ -34,15 +34,15 @@ end
 
 def download_menu()
   puts "\n\n"
-  puts " -----Please select a file to download-----".center(@columns)
-  puts "             ___________________________________________________________________________________ "
-  puts "  Press [1] |       Amazon      | URL: http://s3.amazonaws.com/tcmg412-fall2016/http_access_log |"
-  puts "     for    |  (for remote use) |                                                               |"
-  puts "            |------------------------------------------------------------------------------------"
-  puts "  Press [2] |       TAMU        | URL: http://physis.arch.tamu.edu/files/http_access_log        |"
-  puts "     for    |  (for local use)  |                                                               |"
-  puts "            |-----------------------------------------------------------------------------------|\n"
-  puts "  or press [C] to enter a custom URL.\n\n"
+  puts " Select a file to download: ".center(@columns)
+  puts "           ___________________________________________________________________________________ ".center(@columns)
+  puts "Press [1] |       Amazon      |                                                               |".center(@columns)
+  puts "   for    |    (remote use)   | URL: http://s3.amazonaws.com/tcmg412-fall2016/http_access_log |".center(@columns)
+  puts "          |___________________|_______________________________________________________________|".center(@columns)
+  puts "Press [2] |       TAMU        |                                                               |".center(@columns)
+  puts "   for    |  (for local use)  | URL: http://physis.arch.tamu.edu/files/http_access_log        |".center(@columns)
+  puts "          |___________________|_______________________________________________________________|\n".center(@columns)
+  puts "or press [C] to enter a custom URL.\n\n".center(@columns)
   puts "Please enter a download source (1, 2, or C)\n\n".center(@columns)
 end
 
@@ -70,8 +70,10 @@ splitter_path = 'logs_by_month/'
 
 #Ask user if they'd like to execute the program
 puts "\n"
-puts "  Apache Log Parser - TCMG 304  ".center(@columns)
-puts "  Begin parsing? (Y/N)  ".center(@columns)
+puts "-------------------------------------".center(@columns)
+puts "Apache Log Parser - TCMG 304  ".center(@columns)
+puts "Begin parsing? (Y/N)  ".center(@columns)
+puts "-------------------------------------".center(@columns)
 response = gets.chomp.upcase
 
 if response == "Y"
@@ -162,6 +164,7 @@ if file_frequency_least.length > 100
     end
   else
     puts "\n\n     Good call. Not outputting #{file_frequency_least.length} files. \n\n"
+    sleep(2)
   end
   else
   file_frequency_least.each do |file, requests|
@@ -173,12 +176,15 @@ end
 puts "File Splitter".center(@columns, '-')
 puts "The log file will now be catorgorized and saved individually.".center(@columns)
 puts "The default save location is - '#{splitter_path}'".center(@columns)
-puts "\nReady to continue? (Y/N)"
+puts "\nContinue? (Y/N)".center(@columns)
 splitter_conf = gets.chomp.upcase
 
 if splitter_conf == 'Y'
-  puts "Starting "
-  else abort.("OK. Files won't won't be saved").center(@columns)
+  puts "     Saving files."
+  sleep(1)
+  else 
+    abort()
+    puts "OK. Files won't won't be saved".center(@columns)
 end
 
 Dir.mkdir(splitter_path) unless File.exists?(splitter_path)
@@ -188,5 +194,4 @@ monthly_requests.each do |k,v|
 		write.puts(v)
 	end
 end
-puts "     \n\nLogs catorgorized by year and month and saved at #{splitter_path}.\n\n"
-puts "     Program execution complete. Closing...\n\n".center(@columns)
+puts "     Program execution complete. Closing...\n.".center(@columns)
