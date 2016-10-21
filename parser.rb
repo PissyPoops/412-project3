@@ -43,7 +43,9 @@ log_file = 'log_file.txt'
 splitter_path = 'logs_by_month/'
 rows, columns = winsize
 
+#####################################################################################################
 #Ask user if they'd like to execute the program
+puts '\n\n'
 puts "Begin parsing? (Y/N)".center(columns)
 response = gets.chomp.upcase
 if response == "Y" 
@@ -112,7 +114,7 @@ file_frequency_least = smallest_hash(file_frequency).to_a.sort
 
 #Since multiple files can be tied for first, this gives the user the option of viewing the amount of files least requested (1).
 #Or allows viewing the file names in alphabetical order.
-if file_frequency_least.length > 1
+if file_frequency_least.length > 100
   puts "     There are over #{file_frequency_least.length} individual files that are tied for least amount of requests.".center(columns)
   puts "     Would you like to view all of these individual files? (Y/N)\n".center(columns)
   file_least_response = gets.chomp.upcase
@@ -122,7 +124,7 @@ if file_frequency_least.length > 1
       puts
     end
   else
-    puts "     OK. Not printing #{file_frequency_least.length} files." + "\n"
+    puts "\n\n     Good call. Not outputting #{file_frequency_least.length} files. \n\n"
   end
   else
   file_frequency_least.each do |file, requests|
@@ -132,12 +134,12 @@ end
 
 #######FILE-SPLITTER#######
 puts "The log file will now be catorgorized and saved individually.".center(columns)
-puts "The default save location is - #{splitter_path}.\n Would you like to save to a different location? (Y/N)"
+puts "The default save location is - '#{splitter_path}'. Would you like to save to a different location? (Y/N)".center(columns)
 splitter_conf = gets.chomp.upcase
 
 if splitter_conf == 'Y'
   puts "Please enter a new save location: "
-  splitter.path = gets.chomp.downcase
+  splitter_path = gets.chomp.downcase
 end
 
 Dir.mkdir(splitter_path) unless File.exists?(splitter_path)
@@ -147,4 +149,4 @@ monthly_requests.each do |k,v|
 		write.puts(v)
 	end
 end
-puts "Logs catorgorized by year and month and saved at #{splitter_path}.\n\n"
+puts "\n\nLogs catorgorized by year and month and saved at #{splitter_path}.\n\n"
